@@ -28,7 +28,9 @@ def pytest_collection_modifyitems(session, config, items):
     group_id = config.getoption('test-group')
 
     # Give up if the session fails during collection
-    if session.shouldstop or session.testsfailed:
+    shouldstop = getattr(session, 'shouldstop', None)
+    testsfailed = getattr(session, 'testsfailed', None)
+    if shouldstop or testsfailed:
         return
 
     if not group_count or not group_id:
