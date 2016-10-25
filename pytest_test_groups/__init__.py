@@ -1,4 +1,4 @@
-import random
+from random import Random
 import math
 
 
@@ -22,8 +22,8 @@ def pytest_addoption(parser):
                     help='The number of groups to split the tests into')
     group.addoption('--test-group', dest='test-group', type=int,
                     help='The group of tests that should be executed')
-    group.addoption('--test-group-random-seed', dest='random-seed', type=float,
-                    help='Value between 0.0 and 1.0 to seed psuedo-random test ordering')
+    group.addoption('--test-group-random-seed', dest='random-seed', type=int,
+                    help='Integer to seed psuedo-random test ordering')
 
 
 def pytest_collection_modifyitems(session, config, items):
@@ -35,7 +35,8 @@ def pytest_collection_modifyitems(session, config, items):
         return
 
     if seed:
-        random.shuffle(items, lambda: seed)
+        seeded = Random(seed)
+        seeded.shuffle(items)
 
     total_items = len(items)
 

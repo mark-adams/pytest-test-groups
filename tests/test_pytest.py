@@ -55,19 +55,19 @@ def test_group_runs_all_test(testdir):
 
     result = testdir.inline_run('--test-group-count', '2',
                                 '--test-group', '1',
-                                '--test-group-random-seed', '0.5')
+                                '--test-group-random-seed', '5')
     group_1 = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
     result.assertoutcome(passed=13)
 
     result = testdir.inline_run('--test-group-count', '2',
                                 '--test-group', '2',
-                                '--test-group-random-seed', '0.5')
+                                '--test-group-random-seed', '5')
     group_2 = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
     result.assertoutcome(passed=12)
 
     result = testdir.inline_run('--test-group-count', '1',
                                 '--test-group', '1',
-                                '--test-group-random-seed', '0.5')
+                                '--test-group-random-seed', '5')
     all_tests = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
 
     assert set(group_1 + group_2) == set(all_tests)
