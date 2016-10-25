@@ -23,7 +23,7 @@ def pytest_addoption(parser):
     group.addoption('--test-group', dest='test-group', type=int,
                     help='The group of tests that should be executed')
     group.addoption('--test-group-random-seed', dest='random-seed', type=float,
-                    help='Value between 0.0 and 0.9 to seed psuedo-random test ordering')
+                    help='Value between 0.0 and 1.0 to seed psuedo-random test ordering')
 
 
 def pytest_collection_modifyitems(session, config, items):
