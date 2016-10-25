@@ -1,4 +1,4 @@
-import random
+from random import Random
 import math
 
 
@@ -35,7 +35,8 @@ def pytest_collection_modifyitems(session, config, items):
         return
 
     if seed:
-        random.shuffle(items, lambda: seed)
+        seeded = Random(seed)
+        seeded.shuffle(items)
 
     total_items = len(items)
 
