@@ -19,6 +19,9 @@ Usage
 
     # Split the tests into 10 groups and run the second group
     py.test --test-group-count 10 --test-group=2
+    
+    # Randomize the test order, split into 10 groups, and run the second group
+    py.test --test-group-count 10 --test-group=2 --test-group-random-seed=0.618033
 
 
 Why would I use this?
