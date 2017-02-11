@@ -1,5 +1,6 @@
-from random import Random
 import math
+
+from random import Random
 
 
 def get_group_size(total_items, total_groups):
