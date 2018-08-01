@@ -1,16 +1,20 @@
+# -*- coding: utf-8 -*-
 import math
 from random import Random
 
 import pytest
 
-from random import Random
+# Import 3rd-party libs
+from _pytest.config import create_terminal_writer
 
 
 def get_group_size(total_items, total_groups):
+    """Return the group size."""
     return int(math.ceil(float(total_items) / total_groups))
 
 
 def get_group(items, group_size, group_id):
+    """Get the items from the passed in group based on group size."""
     start = group_size * (group_id - 1)
     end = start + group_size
 
@@ -48,7 +52,15 @@ def pytest_collection_modifyitems(session, config, items):
 
     group_size = get_group_size(total_items, group_count)
     tests_in_group = get_group(items, group_size, group_id)
-    del items[:]
-    items.extend(tests_in_group)
+    items[:] = tests_in_group
 
-    print('Running test group #{0} ({1} tests)'.format(group_id, len(items)))
+    terminal_reporter = config.pluginmanager.get_plugin('terminalreporter')
+    terminal_writer = create_terminal_writer(config)
+    message = terminal_writer.markup(
+        'Running test group #{0} ({1} tests)\n'.format(
+            group_id,
+            len(items)
+        ),
+        yellow=True
+    )
+    terminal_reporter.write(message)
