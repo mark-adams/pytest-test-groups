@@ -2,14 +2,13 @@ language: python
 sudo: false
 python:
   - "2.7"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "3.6"
+  - "3.7"
+  - "3.8"
 install:
-  - "pip install -U flake8 pytest"
+  - "pip install -U flake8 pytest black"
   - "pip install -e ."
 before_script:
   - "flake8"
+  - "black"
 script:
   - py.test
