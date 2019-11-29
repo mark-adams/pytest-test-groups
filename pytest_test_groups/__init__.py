@@ -1,27 +1,19 @@
 # -*- coding: utf-8 -*-
 
 # Import python libs
-import math
 from random import Random
 
 # Import 3rd-party libs
 from _pytest.config import create_terminal_writer
 
 
-def get_group_size(total_items, total_groups):
-    """Return the group size."""
-    return int(math.ceil(float(total_items) / total_groups))
-
-
-def get_group(items, group_size, group_id):
-    """Get the items from the passed in group based on group size."""
-    start = group_size * (group_id - 1)
-    end = start + group_size
-
-    if start >= len(items) or start < 0:
+def get_group(items, group_count, group_id):
+    """Get the items from the passed in group based on group count."""
+    if not (1 <= group_id <= group_count):
         raise ValueError("Invalid test-group argument")
 
-    return items[start:end]
+    start = group_id - 1
+    return items[start:len(items):group_count]
 
 
 def pytest_addoption(parser):
@@ -46,11 +38,7 @@ def pytest_collection_modifyitems(session, config, items):
         seeded = Random(seed)
         seeded.shuffle(items)
 
-    total_items = len(items)
-
-    group_size = get_group_size(total_items, group_count)
-    tests_in_group = get_group(items, group_size, group_id)
-    items[:] = tests_in_group
+    items[:] = get_group(items, group_count, group_id)
 
     terminal_reporter = config.pluginmanager.get_plugin('terminalreporter')
     terminal_writer = create_terminal_writer(config)
