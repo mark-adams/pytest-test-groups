@@ -5,7 +5,7 @@ python:
   - "3.7"
   - "3.8"
 install:
-  - "pip install -U flake8 pytest black"
+  - "pip install -U flake8 pytest"
   - "pip install -e ."
 before_script:
   - "flake8"
