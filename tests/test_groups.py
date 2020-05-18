@@ -1,3 +1,4 @@
+import random
 from itertools import chain
 from uuid import uuid4
 
@@ -81,11 +82,43 @@ def test_file_group_that_is_too_low_raises_value_error():
 
 
 def test_file_group_groups_by_modules():
-    group1 = unique('module1')
-    group2 = unique('module2')
-    items = [MockItem(group1), MockItem(group2), MockItem(group2), MockItem(group1)]
+    module1 = unique('module1')
+    module2 = unique('module2')
+    items = [MockItem(module1), MockItem(module2), MockItem(module2), MockItem(module1)]
 
     group = get_file_group(items, 2, 1)
 
-    assert {item.filename for item in group} == {item.filename for item in items if item.module == group1}
+    assert {item.filename for item in group} == {item.filename for item in items if item.module == module1}
+
+
+def test_file_group__group_evenly():
+    module1 = unique('module1')
+    module2 = unique('module2')
+    module3 = unique('module3')
+    module4 = unique('module3')
+
+    items = [MockItem(module1) for _ in range(100)]
+    items += [MockItem(module2) for _ in range(22)]
+    items += [MockItem(module3) for _ in range(60)]
+    items += [MockItem(module4) for _ in range(25)]
+
+    random.shuffle(items)
+
+    # total of 245 tests between 3 groups. Desired: 81.66 tests in each group.
+    # Using greedy algorithm, this means:
+    # group1: module1
+    # group2: module3 + module2
+    # group3: module2
+
+    group1 = get_file_group(items, 3, 1)
+    assert len(group1) == 100
+    assert {item.filename for item in group1} == {item.filename for item in items if item.module == module1}
+
+    group2 = get_file_group(items, 3, 2)
+    assert len(group2) == 82
+    assert {item.filename for item in group2} == {item.filename for item in items if item.module in (module2, module3)}
+
+    group3 = get_file_group(items, 3, 3)
+    assert len(group3) == 25
+    assert {item.filename for item in group3} == {item.filename for item in items if item.module == module4}
 
