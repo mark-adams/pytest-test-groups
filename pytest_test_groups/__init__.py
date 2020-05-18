@@ -9,11 +9,22 @@ from _pytest.config import create_terminal_writer
 
 def get_group(items, group_count, group_id):
     """Get the items from the passed in group based on group count."""
+    start = _get_start(group_id, group_count)
+    return items[start:len(items):group_count]
+
+
+def get_file_group(items, group_count, group_id):
+    """Get the items from the passed in group, split by files, based on group count."""
+    start = _get_start(group_id, group_count)
+    file_groups = sorted(set(item.module for item in items), key=lambda m: str(m))
+    files = file_groups[start:len(file_groups):group_count]
+    return [item for item in items if item.module in files]
+
+
+def _get_start(group_id, group_count):
     if not (1 <= group_id <= group_count):
         raise ValueError("Invalid test-group argument")
-
-    start = group_id - 1
-    return items[start:len(items):group_count]
+    return group_id - 1
 
 
 def pytest_addoption(parser):
@@ -22,6 +33,8 @@ def pytest_addoption(parser):
                     help='The number of groups to split the tests into')
     group.addoption('--test-group', dest='test-group', type=int,
                     help='The group of tests that should be executed')
+    group.addoption('--test-group-by-files', dest='group-by-files', action='store_true',
+                    help='Group by files instead of collected items')
     group.addoption('--test-group-random-seed', dest='random-seed', type=int,
                     help='Integer to seed pseudo-random test ordering')
 
@@ -29,6 +42,7 @@ def pytest_addoption(parser):
 def pytest_collection_modifyitems(session, config, items):
     group_count = config.getoption('test-group-count')
     group_id = config.getoption('test-group')
+    group_by_files = config.getoption("group-by-files", False)
     seed = config.getoption('random-seed', False)
 
     if not group_count or not group_id:
@@ -38,7 +52,10 @@ def pytest_collection_modifyitems(session, config, items):
         seeded = Random(seed)
         seeded.shuffle(items)
 
-    items[:] = get_group(items, group_count, group_id)
+    if group_by_files:
+        items[:] = get_file_group(items, group_count, group_id)
+    else:
+        items[:] = get_group(items, group_count, group_id)
 
     terminal_reporter = config.pluginmanager.get_plugin('terminalreporter')
     terminal_writer = create_terminal_writer(config)
