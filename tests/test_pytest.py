@@ -86,8 +86,7 @@ def test_group_by_files(testdir):
 
     result = testdir.inline_run('--test-group-count', '2',
                                 '--test-group', '1',
-                                '--test-group-by-files',
-    )
+                                '--test-group-by-files')
     group_1 = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
     result.assertoutcome(passed=2)
 
@@ -95,8 +94,7 @@ def test_group_by_files(testdir):
 
     result = testdir.inline_run('--test-group-count', '2',
                                 '--test-group', '2',
-                                '--test-group-by-files',
-    )
+                                '--test-group-by-files')
     group_2 = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
     result.assertoutcome(passed=3)
     assert set(group_2) == {'test_c', 'test_d', 'test_e'}

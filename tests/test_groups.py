@@ -121,4 +121,3 @@ def test_file_group__group_evenly():
     group3 = get_file_group(items, 3, 3)
     assert len(group3) == 25
     assert {item.filename for item in group3} == {item.filename for item in items if item.module == module4}
-
