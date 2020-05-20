@@ -77,9 +77,9 @@ def test_group_by_files(testdir):
     testdir.makepyfile(test_file_1="""
         def test_a(): pass
         def test_b(): pass
+        def test_c(): pass
     """,
                        test_file_2="""
-        def test_c(): pass
         def test_d(): pass
         def test_e(): pass
      """)
@@ -88,16 +88,16 @@ def test_group_by_files(testdir):
                                 '--test-group', '1',
                                 '--test-group-by-files')
     group_1 = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
-    result.assertoutcome(passed=2)
+    result.assertoutcome(passed=3)
 
-    assert set(group_1) == {'test_a', 'test_b'}
+    assert set(group_1) == {'test_a', 'test_b', 'test_c'}
 
     result = testdir.inline_run('--test-group-count', '2',
                                 '--test-group', '2',
                                 '--test-group-by-files')
     group_2 = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
-    result.assertoutcome(passed=3)
-    assert set(group_2) == {'test_c', 'test_d', 'test_e'}
+    result.assertoutcome(passed=2)
+    assert set(group_2) == {'test_d', 'test_e'}
 
 
 def test_group_by_files__more_groups_than_files(testdir):
@@ -117,9 +117,9 @@ def test_group_by_files__more_groups_than_files(testdir):
         '--test-group-by-files',
     )
     group_1 = set(x.item.name for x in result.calls if x._name == 'pytest_runtest_call')
-    result.assertoutcome(passed=2)
+    result.assertoutcome(passed=3)
 
-    assert group_1 == {'test_a', 'test_b'}
+    assert group_1 == {'test_c', 'test_d', 'test_e'}
 
     result = testdir.inline_run(
         '--test-group-count', '3',
@@ -128,9 +128,9 @@ def test_group_by_files__more_groups_than_files(testdir):
     )
 
     group_2 = set(x.item.name for x in result.calls if x._name == 'pytest_runtest_call')
-    result.assertoutcome(passed=3)
+    result.assertoutcome(passed=2)
 
-    assert group_2 == {'test_c', 'test_d', 'test_e'}
+    assert group_2 == {'test_a', 'test_b'}
 
     result = testdir.inline_run(
         '--test-group-count', '3',
