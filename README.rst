@@ -23,6 +23,10 @@ Usage
     # Randomize the test order, split into 10 groups, and run the second group
     py.test --test-group-count 10 --test-group=2 --test-group-random-seed=12345
 
+    # Split the tests by files instead of items into 3 groups and run the second group.
+    # The groups might not be in the same size as each group contains full test files
+    py.test --test-group-count 10 --test-group=2 --test-group-by-files
+
 
 Why would I use this?
 ------------------------------------------------------------------
