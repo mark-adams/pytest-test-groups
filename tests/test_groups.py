@@ -88,7 +88,8 @@ def test_file_group_groups_by_modules():
 
     group = get_file_group(items, 2, 1)
 
-    assert {item.filename for item in group} == {item.filename for item in items if item.module == module1}
+    assert len(group) == 2
+    assert len({item.module for item in group}) == 1
 
 
 def test_file_group__group_evenly():

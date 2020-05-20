@@ -23,7 +23,7 @@ def get_file_group(items, group_count, group_id):
     for item in items:
         items_in_module[item.module] += 1
 
-    max_items_per_group = ceil(len(items) / group_count)
+    max_items_per_group = ceil(len(items) / float(group_count))
 
     modules = sorted(
         items_in_module.keys(),
