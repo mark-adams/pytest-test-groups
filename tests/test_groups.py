@@ -96,7 +96,7 @@ def test_file_group__group_evenly():
     module1 = unique('module1')
     module2 = unique('module2')
     module3 = unique('module3')
-    module4 = unique('module3')
+    module4 = unique('module4')
 
     items = [MockItem(module1) for _ in range(100)]
     items += [MockItem(module2) for _ in range(22)]
@@ -108,17 +108,17 @@ def test_file_group__group_evenly():
     # total of 245 tests between 3 groups. Desired: 81.66 tests in each group.
     # Using greedy algorithm, this means:
     # group1: module1
-    # group2: module3 + module2
-    # group3: module2
+    # group2: module3
+    # group3: module2 + module4
 
     group1 = get_file_group(items, 3, 1)
     assert len(group1) == 100
     assert {item.filename for item in group1} == {item.filename for item in items if item.module == module1}
 
     group2 = get_file_group(items, 3, 2)
-    assert len(group2) == 82
-    assert {item.filename for item in group2} == {item.filename for item in items if item.module in (module2, module3)}
+    assert len(group2) == 60
+    assert {item.filename for item in group2} == {item.filename for item in items if item.module == module3}
 
     group3 = get_file_group(items, 3, 3)
-    assert len(group3) == 25
-    assert {item.filename for item in group3} == {item.filename for item in items if item.module == module4}
+    assert len(group3) == 47
+    assert {item.filename for item in group3} == {item.filename for item in items if item.module in (module4, module2)}

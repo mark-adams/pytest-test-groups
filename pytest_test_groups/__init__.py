@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 
 # Import python libs
-from math import ceil
 from random import Random
-from collections import defaultdict
+from collections import defaultdict, OrderedDict
 
 # Import 3rd-party libs
 from _pytest.config import create_terminal_writer
@@ -18,33 +17,25 @@ def get_group(items, group_count, group_id):
 def get_file_group(items, group_count, group_id):
     """Get the items from the passed in group, split by files, based on group count."""
     start = _get_start(group_id, group_count)
-    items_in_module = defaultdict(int)
+    modules_to_items = defaultdict(list)
 
     for item in items:
-        items_in_module[item.module] += 1
+        modules_to_items[item.module].append(item)
 
-    max_items_per_group = ceil(len(items) / float(group_count))
-
-    modules = sorted(
-        items_in_module.keys(),
-        key=lambda group: items_in_module[group],
+    sorted_modules_items = sorted(
+        modules_to_items.items(),
+        key=lambda mod_items: len(mod_items[1]),
         reverse=True
     )
 
-    group_to_modules = defaultdict(list)
-    for i in range(group_count):
-        try:
-            module = modules.pop(0)  # start with max
-            group_to_modules[i].append(module)
-            items_in_group = items_in_module[module]
-            while items_in_group < max_items_per_group:
-                module = modules.pop(-1)  # add min
-                group_to_modules[i].append(module)
-                items_in_group += items_in_module[module]
-        except IndexError:
-            break
+    group_to_items = OrderedDict((i, []) for i in range(group_count))
+    for module, items in sorted_modules_items:
+        # add largest module to minimal group, based on greedy algorithm from:
+        # https://www.ijcai.org/Proceedings/09/Papers/096.pdf
+        minimal_group = min(group_to_items.values(), key=lambda items: len(items))
+        minimal_group.extend(items)
 
-    return [item for item in items if item.module in group_to_modules[start]]
+    return group_to_items[start]
 
 
 def _get_start(group_id, group_count):
