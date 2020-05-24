@@ -7,14 +7,18 @@ import pytest
 from pytest_test_groups import get_group, get_file_group
 
 
-def unique(suffix):
-    return uuid4().hex[:6] + suffix
+def unique(prefix):
+    return prefix + uuid4().hex[:6]
 
 
 class MockItem:
+    class MockModule:
+        def __init__(self, name):
+            self.__file__ = name
+
     def __init__(self, module):
-        self.module = str(module)
-        self.filename = unique('.py')
+        self.module = self.MockModule(module)
+        self.test_name = unique('test_')
 
 
 def test_group_is_the_proper_size():
@@ -89,7 +93,7 @@ def test_file_group_groups_by_modules():
     group = get_file_group(items, 2, 1)
 
     assert len(group) == 2
-    assert len({item.module for item in group}) == 1
+    assert len({item.module.__file__ for item in group}) == 1
 
 
 def test_file_group__group_evenly():
@@ -113,12 +117,16 @@ def test_file_group__group_evenly():
 
     group1 = get_file_group(items, 3, 1)
     assert len(group1) == 100
-    assert {item.filename for item in group1} == {item.filename for item in items if item.module == module1}
+    assert {item.test_name for item in group1} == _get_modules_items({module1}, items)
 
     group2 = get_file_group(items, 3, 2)
     assert len(group2) == 60
-    assert {item.filename for item in group2} == {item.filename for item in items if item.module == module3}
+    assert {item.test_name for item in group2} == _get_modules_items({module3}, items)
 
     group3 = get_file_group(items, 3, 3)
     assert len(group3) == 47
-    assert {item.filename for item in group3} == {item.filename for item in items if item.module in (module4, module2)}
+    assert {item.test_name for item in group3} == _get_modules_items({module2, module4}, items)
+
+
+def _get_modules_items(module_names, items):
+    return {item.test_name for item in items if item.module.__file__ in module_names}

@@ -20,7 +20,7 @@ def get_file_group(items, group_count, group_id):
     modules_to_items = defaultdict(list)
 
     for item in items:
-        modules_to_items[item.module].append(item)
+        modules_to_items[item.module.__file__].append(item)
 
     sorted_modules_items = sorted(
         modules_to_items.items(),
