@@ -4,8 +4,8 @@
 .. image:: https://img.shields.io/pypi/pyversions/pytest-test-groups.svg
     :target: https://pypi.org/project/pytest-test-groups/
 
-.. image:: https://github.com/pytest-dev/pytest-test-groups/actions/workflows/python-tests.yml/badge.svg
-    :target: https://github.com/pytest-dev/pytest-test-groups/actions?query=workflow%3Apython-tests
+.. image:: https://github.com/mark-adams/pytest-test-groups/actions/workflows/python-tests.yml/badge.svg
+    :target: https://github.com/mark-adams/pytest-test-groups/actions?query=workflow%3Apython-tests
     
 Welcome to pytest-test-groups!
 ==============================
