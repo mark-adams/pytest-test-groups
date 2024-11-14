@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 
+__version__ = '1.1.0'
+
 # Import python libs
 from random import Random
 
