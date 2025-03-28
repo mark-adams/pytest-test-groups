@@ -18,7 +18,6 @@ def get_group_default(items, group_count, group_id):
     start = _get_start(group_id, group_count)
     return items[start:len(items):group_count]
 
-
 def get_group_by_filename(items, group_count, group_id):
     """Get the items from the passed in group, split by files, based on group count."""
     start = _get_start(group_id, group_count)
