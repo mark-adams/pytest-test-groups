@@ -1,7 +1,12 @@
-.. image:: https://secure.travis-ci.org/mark-adams/pytest-test-groups.png?branch=master
-   :alt: Build Status
-   :target: https://travis-ci.org/mark-adams/pytest-test-groups
+.. image:: https://img.shields.io/pypi/v/pytest-test-groups.svg
+    :target: https://pypi.org/project/pytest-test-groups/
 
+.. image:: https://img.shields.io/pypi/pyversions/pytest-test-groups.svg
+    :target: https://pypi.org/project/pytest-test-groups/
+
+.. image:: https://github.com/mark-adams/pytest-test-groups/actions/workflows/python-tests.yml/badge.svg
+    :target: https://github.com/mark-adams/pytest-test-groups/actions?query=workflow%3Apython-tests
+    
 Welcome to pytest-test-groups!
 ==============================
 
@@ -22,6 +27,10 @@ Usage
     
     # Randomize the test order, split into 10 groups, and run the second group
     py.test --test-group-count 10 --test-group=2 --test-group-random-seed=12345
+
+    # Split the tests by files instead of items into 3 groups and run the second group.
+    # The groups might not be in the same size as each group contains full test files
+    py.test --test-group-count 10 --test-group=2 --test-group-by filename
 
 
 Why would I use this?

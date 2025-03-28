@@ -1,0 +1,47 @@
+[build-system]
+build-backend = "setuptools.build_meta"
+requires = [
+    "setuptools>=75", 
+    "setuptools_scm>=8"
+]
+
+[project]
+name = "pytest-test-groups"
+description = "A Pytest plugin for running a subset of your tests by splitting them in to equally sized groups."
+readme = "README.rst"
+requires-python = ">=3.8"
+authors = [
+    { name = "Mark Adams", email = "mark@markadams.me" },
+]
+maintainers = [
+    { name = "Mark Adams", email = "mark@markadams.me" },
+]
+license = {file = "LICENSE"}
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: MIT License',
+    'Operating System :: OS Independent',
+    'Topic :: Software Development :: Testing',
+    "Programming Language :: Python",
+    'Programming Language :: Python :: 3',
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+]
+dependencies = [
+    "pytest>=7.0.0",
+]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/mark-adams/pytest-test-groups"
+Repository = "https://github.com/mark-adams/pytest-test-groups"
+
+[project.entry-points.pytest11]
+test-groups = "pytest_test_groups"
+
+[tool.setuptools_scm]
