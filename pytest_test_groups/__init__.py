@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from collections import defaultdict, OrderedDict
-from enum import StrEnum
+from enum import Enum
 from random import Random
 
 import pytest
@@ -8,6 +8,11 @@ import pytest
 # Import 3rd-party libs
 from _pytest.config import create_terminal_writer
 
+class StrEnum(str, Enum):
+    """Custom StrEnum for Python < 3.11 compatibility."""
+    def __str__(self):
+        return self.value
+    
 class GroupBy(StrEnum):
     DEFAULT = ""
     FILENAME = "filename"
