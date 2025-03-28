@@ -1,7 +1,8 @@
 [build-system]
 build-backend = "setuptools.build_meta"
 requires = [
-    "setuptools>=75",
+    "setuptools>=75", 
+    "setuptools_scm>=8"
 ]
 
 [project]
@@ -43,5 +44,4 @@ Repository = "https://github.com/mark-adams/pytest-test-groups"
 [project.entry-points.pytest11]
 test-groups = "pytest_test_groups"
 
-[tool.setuptools.dynamic]
-version = {attr = "pytest_test_groups.__version__"}
+[tool.setuptools_scm]
