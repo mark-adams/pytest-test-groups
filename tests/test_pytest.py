@@ -161,3 +161,22 @@ def test_group_by_files__more_files_than_groups(testdir):
         '--test-group-by', 'filename',
     )
     result.assertoutcome(passed=5)
+
+def test_group_runs_after_std_item_collection(testdir):
+    """If @pytest.hookimpl(hookwrapper=True) is not used, the plugin will split the item
+    list of items before other filtering (like -k) has been applied. This could potentially
+    result in non-evenly sized groups or even empty groups.
+
+    This test splits the two tests into two groups but excludes the first test with -k.
+    Before adding pytest.hookimpl, this test failed because test_x was in group 2 instead of group 1.
+    """
+    testdir.makepyfile("""
+        def test_x(): pass
+        def test_y(): pass
+    """)
+
+    result = testdir.runpytest_subprocess('-k', 'test_y', '--test-group-count', '2', '--test-group', '1')
+    result.assert_outcomes(passed=1)
+
+    result = testdir.runpytest_subprocess('-k', 'test_y', '--test-group-count', '2', '--test-group', '2')
+    assert 'Invalid test-group argument' in result.stderr.str()

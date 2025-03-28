@@ -37,18 +37,18 @@ def test_all_groups_together_form_original_set_of_tests():
         assert combined == set(items)
 
 
-def test_group_that_is_too_high_raises_value_error():
+def test_group_that_is_too_high_raises_error():
     items = [str(i) for i in range(32)]
 
-    with pytest.raises(ValueError):
+    with pytest.raises(pytest.UsageError, match='Invalid test-group argument'):
         # When group_count=4, group_id=5 is out of bounds
         get_group_default(items, 4, 5)
 
 
-def test_group_that_is_too_low_raises_value_error():
+def test_group_that_is_too_low_raises_error():
     items = [str(i) for i in range(32)]
 
-    with pytest.raises(ValueError):
+    with pytest.raises(pytest.UsageError, match='Invalid test-group argument'):
         # When group_count=4, group_id=0 is out of bounds
         get_group_default(items, 4, 0)
 
@@ -69,18 +69,18 @@ def test_all_file_groups_together_form_original_set_of_tests():
         assert combined == set(items)
 
 
-def test_file_group_that_is_too_high_raises_value_error():
+def test_file_group_that_is_too_high_raises_error():
     items = [MockItem(i) for i in range(32)]
 
-    with pytest.raises(ValueError):
+    with pytest.raises(pytest.UsageError, match='Invalid test-group argument'):
         # When group_count=4, group_id=5 is out of bounds
         get_group_by_filename(items, 4, 5)
 
 
-def test_file_group_that_is_too_low_raises_value_error():
+def test_file_group_that_is_too_low_raises_error():
     items = [MockItem(i) for i in range(32)]
 
-    with pytest.raises(ValueError):
+    with pytest.raises(pytest.UsageError, match='Invalid test-group argument'):
         # When group_count=4, group_id=0 is out of bounds
         get_group_by_filename(items, 4, 0)
 

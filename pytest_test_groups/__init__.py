@@ -12,7 +12,6 @@ class GroupBy(StrEnum):
     DEFAULT = ""
     FILENAME = "filename"
 
-
 def get_group_default(items, group_count, group_id):
     """Get the items from the passed in group based on group count."""
     start = _get_start(group_id, group_count)
@@ -43,7 +42,7 @@ def get_group_by_filename(items, group_count, group_id):
 
 def _get_start(group_id, group_count):
     if not (1 <= group_id <= group_count):
-        raise ValueError("Invalid test-group argument")
+        raise pytest.UsageError('Invalid test-group argument')
     return group_id - 1
 
 groupByHandlers = {
@@ -79,6 +78,9 @@ def pytest_collection_modifyitems(session, config, items):
 
     group_by = groupByHandlers[group_by]
     items[:] = group_by(items, group_count, group_id)
+
+    if len(items) == 0:
+        raise pytest.UsageError('Invalid test-group argument')
 
     terminal_reporter = config.pluginmanager.get_plugin('terminalreporter')
     terminal_writer = create_terminal_writer(config)
