@@ -86,7 +86,7 @@ def test_group_by_files(testdir):
 
     result = testdir.inline_run('--test-group-count', '2',
                                 '--test-group', '1',
-                                '--test-group-by-files')
+                                '--test-group-by', 'filename')
     group_1 = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
     result.assertoutcome(passed=3)
 
@@ -94,7 +94,7 @@ def test_group_by_files(testdir):
 
     result = testdir.inline_run('--test-group-count', '2',
                                 '--test-group', '2',
-                                '--test-group-by-files')
+                                '--test-group-by', 'filename')
     group_2 = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
     result.assertoutcome(passed=2)
     assert set(group_2) == {'test_d', 'test_e'}
@@ -114,7 +114,7 @@ def test_group_by_files__more_groups_than_files(testdir):
     result = testdir.inline_run(
         '--test-group-count', '3',
         '--test-group', '1',
-        '--test-group-by-files',
+        '--test-group-by', 'filename',
     )
     group_1 = set(x.item.name for x in result.calls if x._name == 'pytest_runtest_call')
     result.assertoutcome(passed=3)
@@ -124,7 +124,7 @@ def test_group_by_files__more_groups_than_files(testdir):
     result = testdir.inline_run(
         '--test-group-count', '3',
         '--test-group', '2',
-        '--test-group-by-files',
+        '--test-group-by', 'filename',
     )
 
     group_2 = set(x.item.name for x in result.calls if x._name == 'pytest_runtest_call')
@@ -135,7 +135,7 @@ def test_group_by_files__more_groups_than_files(testdir):
     result = testdir.inline_run(
         '--test-group-count', '3',
         '--test-group', '3',
-        '--test-group-by-files',
+        '--test-group-by', 'filename',
     )
 
     group_3 = set(x.item.name for x in result.calls if x._name == 'pytest_runtest_call')
@@ -158,6 +158,6 @@ def test_group_by_files__more_files_than_groups(testdir):
     result = testdir.inline_run(
         '--test-group-count', '1',
         '--test-group', '1',
-        '--test-group-by-files',
+        '--test-group-by', 'filename',
     )
     result.assertoutcome(passed=5)

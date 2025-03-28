@@ -30,7 +30,7 @@ Usage
 
     # Split the tests by files instead of items into 3 groups and run the second group.
     # The groups might not be in the same size as each group contains full test files
-    py.test --test-group-count 10 --test-group=2 --test-group-by-files
+    py.test --test-group-count 10 --test-group=2 --test-group-by filename
 
 
 Why would I use this?
