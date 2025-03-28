@@ -63,8 +63,13 @@ def pytest_addoption(parser):
                     help='The group of tests that should be executed')
     group.addoption('--test-group-by', dest='test-group-by', type=GroupBy, default=GroupBy.DEFAULT)
     group.addoption('--test-group-random-seed', dest='random-seed', type=int,
-                    help='Integer to seed pseudo-random test ordering')
+                    help='Integer to seed pseudo-random test selection')
 
+
+def _sort_in_original_order(items, orig_items):
+    original_order = {item: index for index, item in enumerate(orig_items)}
+    items.sort(key=original_order.__getitem__)
+    return items
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_collection_modifyitems(session, config, items):
@@ -76,8 +81,10 @@ def pytest_collection_modifyitems(session, config, items):
 
     if not group_count or not group_id:
         return
+    
+    original_items = items[:]
 
-    if seed:
+    if seed is not False:
         seeded = Random(seed)
         seeded.shuffle(items)
 
@@ -86,6 +93,9 @@ def pytest_collection_modifyitems(session, config, items):
 
     if len(items) == 0:
         raise pytest.UsageError('Invalid test-group argument')
+
+    if seed is not False:
+        items = _sort_in_original_order(items, original_items)
 
     terminal_reporter = config.pluginmanager.get_plugin('terminalreporter')
     terminal_writer = create_terminal_writer(config)

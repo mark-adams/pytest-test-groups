@@ -22,8 +22,8 @@ def test_group_runs_appropriate_tests(testdir):
 
 
 def test_group_runs_all_test(testdir):
-    """Given a large set of tests executed in random order, assert that all
-    tests are executed.
+    """Given a large set of tests executed with a random seed, assert that all
+    tests are executed exactly once.
     """
     testdir.makepyfile("""
         def test_b(): pass
@@ -71,7 +71,6 @@ def test_group_runs_all_test(testdir):
     all_tests = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
 
     assert set(group_1 + group_2) == set(all_tests)
-
 
 def test_group_by_files(testdir):
     testdir.makepyfile(test_file_1="""
@@ -180,3 +179,22 @@ def test_group_runs_after_std_item_collection(testdir):
 
     result = testdir.runpytest_subprocess('-k', 'test_y', '--test-group-count', '2', '--test-group', '2')
     assert 'Invalid test-group argument' in result.stderr.str()
+
+def test_random_group_runs_in_original_order(testdir):
+    """When running tests with a random seed, check test order is unchanged"""
+    testdir.makepyfile("""
+        def test_i(): pass
+        def test_h(): pass
+        def test_g(): pass
+        def test_f(): pass
+        def test_e(): pass
+        def test_d(): pass
+        def test_c(): pass
+        def test_b(): pass
+    """)
+
+    result = testdir.inline_run('--test-group-count', '2',
+                                '--test-group', '1',
+                                '--test-group-random-seed', '5')
+    group_1 = [x.item.name for x in result.calls if x._name == 'pytest_runtest_call']
+    assert group_1 == sorted(group_1, reverse=True)

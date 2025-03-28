@@ -25,7 +25,7 @@ Usage
     # Split the tests into 10 groups and run the second group
     py.test --test-group-count 10 --test-group=2
     
-    # Randomize the test order, split into 10 groups, and run the second group
+    # Assign tests pseudo-randomly into 10 groups, and run the second group
     py.test --test-group-count 10 --test-group=2 --test-group-random-seed=12345
 
     # Split the tests by files instead of items into 3 groups and run the second group.
