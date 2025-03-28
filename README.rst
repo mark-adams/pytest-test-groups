@@ -1,7 +1,12 @@
-.. image:: https://secure.travis-ci.org/mark-adams/pytest-test-groups.png?branch=master
-   :alt: Build Status
-   :target: https://travis-ci.org/mark-adams/pytest-test-groups
+.. image:: https://img.shields.io/pypi/v/pytest-test-groups.svg
+    :target: https://pypi.org/project/pytest-test-groups/
 
+.. image:: https://img.shields.io/pypi/pyversions/pytest-test-groups.svg
+    :target: https://pypi.org/project/pytest-test-groups/
+
+.. image:: https://github.com/mark-adams/pytest-test-groups/actions/workflows/python-tests.yml/badge.svg
+    :target: https://github.com/mark-adams/pytest-test-groups/actions?query=workflow%3Apython-tests
+    
 Welcome to pytest-test-groups!
 ==============================
 
