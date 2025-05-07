@@ -77,14 +77,14 @@ def pytest_collection_modifyitems(session, config, items):
     group_count = config.getoption('test-group-count')
     group_id = config.getoption('test-group')
     group_by = config.getoption("test-group-by")
-    seed = config.getoption('random-seed', False)
+    seed = config.getoption('random-seed')
 
     if not group_count or not group_id:
         return
     
     original_items = items[:]
 
-    if seed is not False:
+    if seed is not None:
         seeded = Random(seed)
         seeded.shuffle(items)
 
@@ -94,7 +94,7 @@ def pytest_collection_modifyitems(session, config, items):
     if len(items) == 0:
         raise pytest.UsageError('Invalid test-group argument')
 
-    if seed is not False:
+    if seed is not None:
         items = _sort_in_original_order(items, original_items)
 
     terminal_reporter = config.pluginmanager.get_plugin('terminalreporter')
