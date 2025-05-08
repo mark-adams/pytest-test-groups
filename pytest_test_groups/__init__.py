@@ -8,19 +8,23 @@ import pytest
 # Import 3rd-party libs
 from _pytest.config import create_terminal_writer
 
+
 class StrEnum(str, Enum):
     """Custom StrEnum for Python < 3.11 compatibility."""
     def __str__(self):
         return self.value
-    
+
+
 class GroupBy(StrEnum):
     DEFAULT = ""
     FILENAME = "filename"
+
 
 def get_group_default(items, group_count, group_id):
     """Get the items from the passed in group based on group count."""
     start = _get_start(group_id, group_count)
     return items[start:len(items):group_count]
+
 
 def get_group_by_filename(items, group_count, group_id):
     """Get the items from the passed in group, split by files, based on group count."""
@@ -45,15 +49,18 @@ def get_group_by_filename(items, group_count, group_id):
 
     return group_to_items[start]
 
+
 def _get_start(group_id, group_count):
     if not (1 <= group_id <= group_count):
         raise pytest.UsageError('Invalid test-group argument')
     return group_id - 1
 
+
 groupByHandlers = {
     GroupBy.DEFAULT: get_group_default,
     GroupBy.FILENAME: get_group_by_filename
 }
+
 
 def pytest_addoption(parser):
     group = parser.getgroup('split your tests into groups and run them')
@@ -71,20 +78,21 @@ def _sort_in_original_order(items, orig_items):
     items.sort(key=original_order.__getitem__)
     return items
 
+
 @pytest.hookimpl(hookwrapper=True)
 def pytest_collection_modifyitems(session, config, items):
     yield
     group_count = config.getoption('test-group-count')
     group_id = config.getoption('test-group')
     group_by = config.getoption("test-group-by")
-    seed = config.getoption('random-seed', False)
+    seed = config.getoption('random-seed')
 
     if not group_count or not group_id:
         return
-    
+
     original_items = items[:]
 
-    if seed is not False:
+    if seed is not None:
         seeded = Random(seed)
         seeded.shuffle(items)
 
@@ -94,7 +102,7 @@ def pytest_collection_modifyitems(session, config, items):
     if len(items) == 0:
         raise pytest.UsageError('Invalid test-group argument')
 
-    if seed is not False:
+    if seed is not None:
         items = _sort_in_original_order(items, original_items)
 
     terminal_reporter = config.pluginmanager.get_plugin('terminalreporter')

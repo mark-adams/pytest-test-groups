@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 ### Changed
+- Fixed a bug where randomization logic was being applied even when no random seed was provided (#31)
 
 ### Removed
 
