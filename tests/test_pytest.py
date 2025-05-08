@@ -72,6 +72,7 @@ def test_group_runs_all_test(testdir):
 
     assert set(group_1 + group_2) == set(all_tests)
 
+
 def test_group_by_files(testdir):
     testdir.makepyfile(test_file_1="""
         def test_a(): pass
@@ -161,6 +162,7 @@ def test_group_by_files__more_files_than_groups(testdir):
     )
     result.assertoutcome(passed=5)
 
+
 def test_group_runs_after_std_item_collection(testdir):
     """If @pytest.hookimpl(hookwrapper=True) is not used, the plugin will split the item
     list of items before other filtering (like -k) has been applied. This could potentially
@@ -179,6 +181,7 @@ def test_group_runs_after_std_item_collection(testdir):
 
     result = testdir.runpytest_subprocess('-k', 'test_y', '--test-group-count', '2', '--test-group', '2')
     assert 'Invalid test-group argument' in result.stderr.str()
+
 
 def test_random_group_runs_in_original_order(testdir):
     """When running tests with a random seed, check test order is unchanged"""
