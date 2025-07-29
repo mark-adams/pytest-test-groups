@@ -6,6 +6,9 @@ on:
     tags:
       - '*' # only publish to PyPI on tag pushes
 
+permissions:
+  contents: read
+
 jobs:
   build:
     name: Build distribution 📦
