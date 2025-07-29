@@ -16,7 +16,10 @@ authors = [
 maintainers = [
     { name = "Mark Adams", email = "mark@markadams.me" },
 ]
-license = {file = "LICENSE"}
+license = "MIT"
+license-files = [
+    "LICENSE"
+]
 classifiers = [
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',
